@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "my-app/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
