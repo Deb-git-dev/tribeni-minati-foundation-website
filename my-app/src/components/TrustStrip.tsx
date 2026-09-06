@@ -61,16 +61,16 @@ export const TrustStrip: React.FC<TrustStripProps> = ({
               <div className={`w-10 h-10 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
                 <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
               </div>
-              <div className="space-y-0.5 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[#191c1e] truncate font-headline-md">
+              <div className="space-y-1 min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-1.5">
+                  <span className="text-xs font-bold text-[#191c1e] font-headline-md leading-snug">
                     {item.title}
                   </span>
-                  <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white border border-border-subtle text-[#64748B]">
+                  <span className="text-[8px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-white border border-border-subtle text-[#64748B] shrink-0">
                     {item.badge}
                   </span>
                 </div>
-                <div className="text-[11px] text-[#64748B] truncate font-mono">
+                <div className="text-[10px] text-[#64748B] font-mono leading-tight">
                   {item.subtitle}
                 </div>
               </div>

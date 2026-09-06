@@ -23,7 +23,7 @@ export const ContactPage: React.FC = () => {
 
   return (
     <div className="w-full pt-20 bg-[#f7f9fb] min-h-screen text-[#191c1e]">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-16 lg:py-24 w-full relative z-10">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 py-16 lg:py-24 pb-32 lg:pb-36 w-full relative z-10">
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
           
           {/* Left Column: Form */}
@@ -171,7 +171,7 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 font-body-base text-sm text-[#45464d] mb-6">
+                  <div className="space-y-3 font-body-base text-sm text-[#45464d] mb-4">
                     <p className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-[#4b41e1] text-[20px] mt-0.5">location_on</span>
                       <span>Kanthaltala (near water tank), Tribeni-Mogra Road, PO Tribeni, Dist Hooghly 712503</span>
@@ -186,10 +186,29 @@ export const ContactPage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="w-full h-40 bg-slate-100 rounded-xl mt-auto overflow-hidden shadow-inner group-hover:scale-[1.02] transition-all duration-700">
+                  <div className="pt-2 mb-6 flex flex-wrap items-center gap-3">
+                    <a
+                      href="https://maps.google.com/?q=Kanthaltala,+Tribeni,+Hooghly,+West+Bengal+712503"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#4b41e1] rounded-xl text-xs font-bold transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">directions</span>
+                      <span>Directions</span>
+                    </a>
+                    <a
+                      href="tel:+919143430927"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-[#191c1e] rounded-xl text-xs font-bold transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">call</span>
+                      <span>Call Office</span>
+                    </a>
+                  </div>
+
+                  <div className="w-full h-44 bg-slate-100 rounded-xl mt-auto overflow-hidden shadow-inner group-hover:scale-[1.02] transition-all duration-700">
                     <img
-                      src="/tmf-assets/real-field-photos/tmf-field-10.jpeg"
-                      alt="Tribeni Headquarters"
+                      src="/tmf-assets/real-field-photos/tmf-field-1.jpeg"
+                      alt="Tribeni Remedial Coaching Center"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -215,7 +234,7 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 font-body-base text-sm text-[#45464d] mb-6">
+                  <div className="space-y-3 font-body-base text-sm text-[#45464d] mb-4">
                     <p className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-[#4b41e1] text-[20px] mt-0.5">location_on</span>
                       <span>Field Office, Radhanagar, PO Gopinagar, PS Dhaniakhali 712402</span>
@@ -226,10 +245,29 @@ export const ContactPage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="w-full h-32 bg-slate-100 rounded-xl mt-auto overflow-hidden shadow-inner group-hover:scale-[1.02] transition-all duration-700">
+                  <div className="pt-2 mb-6 flex flex-wrap items-center gap-3">
+                    <a
+                      href="https://maps.google.com/?q=Radhanagar,+Dhaniakhali,+Hooghly,+West+Bengal+712402"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#4b41e1] rounded-xl text-xs font-bold transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">directions</span>
+                      <span>Directions</span>
+                    </a>
+                    <a
+                      href="tel:+919832274345"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-[#191c1e] rounded-xl text-xs font-bold transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">call</span>
+                      <span>Call Office</span>
+                    </a>
+                  </div>
+
+                  <div className="w-full h-44 bg-slate-100 rounded-xl mt-auto overflow-hidden shadow-inner group-hover:scale-[1.02] transition-all duration-700">
                     <img
-                      src="/tmf-assets/real-field-photos/tmf-field-22.jpeg"
-                      alt="Radhanagar Regional Operations"
+                      src="/tmf-assets/generated/winter_infant_bedding.jpg"
+                      alt="Radhanagar Winter Relief Operations"
                       className="w-full h-full object-cover"
                     />
                   </div>

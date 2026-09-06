@@ -238,7 +238,7 @@ export const STORIES_OF_CHANGE: StoryItem[] = [
   {
     id: 'story-anima',
     title: 'Protecting a Newborn Infant from Severe Winter Frost',
-    category: 'Healthcare',
+    category: 'Winter Relief',
     location: 'Radhanagar, Dhaniakhali, Hooghly',
     beneficiaryName: 'Anima Murmu',
     age: 24,

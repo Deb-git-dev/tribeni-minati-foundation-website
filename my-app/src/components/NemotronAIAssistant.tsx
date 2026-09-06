@@ -65,6 +65,53 @@ export const NemotronAIAssistant: React.FC = () => {
     if (!textToSend) setInputMessage('');
     setIsLoading(true);
 
+    // Fast instant resolution for standard verified foundation queries
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('৮০জি') || lowerText.includes('80g') || lowerText.includes('ট্যাক্স') || lowerText.includes('tax') || lowerText.includes('সার্টিফিকেট')) {
+      const fastReply = 'ত্রিবেনী মিনতি ফাউন্ডেশনে অনুদান দেওয়ার পর আপনি ৮০জি (80G) ধারায় ৫০% আয়কর ছাড়ের সুবিধা পাবেন। অনুদান সম্পন্ন করার পর আমাদের ডোনার পোর্টাল (/donor-portal) থেকে সরাসরি আপনার সার্টিফিকেট ডাউনলোড করতে পারবেন অথবা ট্রানজ্যাকশন স্লিপ সহ আমাদের অফিশিয়াল হেল্পলাইনে (+91-9143430927) হোয়াটসঅ্যাপ করলেও সাথে সাথে সার্টিফিকেট পাঠিয়ে দেওয়া হবে।';
+      setTimeout(() => {
+        setMessages((prev) => prev.map((m) => (m.id === botMsgId ? { ...m, text: fastReply } : m)));
+        setIsLoading(false);
+      }, 150);
+      return;
+    }
+
+    if (lowerText.includes('ব্যাংক') || lowerText.includes('bank') || lowerText.includes('একাউন্ট') || lowerText.includes('account') || lowerText.includes('ifsc')) {
+      const fastReply = 'ত্রিবেনী মিনতি ফাউন্ডেশনের অনুদানের জন্য অফিশিয়াল ব্যাংক বিবরণ:\n• ব্যাংক: Central Bank of India (মগরা শাখা)\n• অ্যাকাউন্ট নম্বর: 5894594000\n• IFSC কোড: CBIN0283860\n• অ্যাকাউন্টের নাম: Tribeni Minati Foundation\nযেকোনো সহায়তায় কল করুন: +91-9143430927';
+      setTimeout(() => {
+        setMessages((prev) => prev.map((m) => (m.id === botMsgId ? { ...m, text: fastReply } : m)));
+        setIsLoading(false);
+      }, 150);
+      return;
+    }
+
+    if (lowerText.includes('রক্তদান') || lowerText.includes('রক্ত') || lowerText.includes('শিবির') || lowerText.includes('camp') || lowerText.includes('blood')) {
+      const fastReply = 'আমাদের আগামী বিনামূল্যে পেডিয়াট্রিক ও চক্ষু পরীক্ষা এবং রক্তদান শিবির মগরায় অনুষ্ঠিত হতে চলেছে। রক্তদান বা মেডিকেল ক্যাম্পের তারিখ জানতে অথবা জরুরি প্রয়োজনে আমাদের হেল্পলাইনে কল করুন: +91-9143430927';
+      setTimeout(() => {
+        setMessages((prev) => prev.map((m) => (m.id === botMsgId ? { ...m, text: fastReply } : m)));
+        setIsLoading(false);
+      }, 150);
+      return;
+    }
+
+    if (lowerText.includes('কোচিং') || lowerText.includes('ভর্তি') || lowerText.includes('school') || lowerText.includes('coaching')) {
+      const fastReply = 'মিনতি ফ্রি রিমিডিয়াল কোচিং সেন্টারে প্রথম থেকে দশম শ্রেণির শিক্ষার্থীদের সম্পূর্ণ বিনামূল্যে পাঠদান, খাতা-বই এবং পুষ্টিকর টিফিন দেওয়া হয়। ভর্তির বিস্তারিত জানতে কল করুন: +91-9143430927';
+      setTimeout(() => {
+        setMessages((prev) => prev.map((m) => (m.id === botMsgId ? { ...m, text: fastReply } : m)));
+        setIsLoading(false);
+      }, 150);
+      return;
+    }
+
+    if (lowerText.includes('csr') || lowerText.includes('corporate') || lowerText.includes('কোম্পানি') || lowerText.includes('proposal')) {
+      const fastReply = 'Tribeni Minati Foundation is eligible for Corporate Social Responsibility (CSR) grants under Schedule VII of the Companies Act 2013 (DARPAN ID: WB/2026/0939703). For CSR proposals and partnership discussions, please contact our secretariat at tribeniminatifoundation@gmail.com or call +91-9143430927.';
+      setTimeout(() => {
+        setMessages((prev) => prev.map((m) => (m.id === botMsgId ? { ...m, text: fastReply } : m)));
+        setIsLoading(false);
+      }, 150);
+      return;
+    }
+
     try {
       const conversationHistory = messages.slice(-4).map((m) => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
@@ -107,8 +154,10 @@ export const NemotronAIAssistant: React.FC = () => {
                 const delta = json.choices?.[0]?.delta?.content || '';
                 if (delta) {
                   accumulated += delta;
+                  // Sanitize rogue Chinese/foreign glyphs
+                  const cleanAccumulated = accumulated.replace(/[\u4e00-\u9fff]/g, ' মধ্যে ');
                   setMessages((prev) =>
-                    prev.map((m) => (m.id === botMsgId ? { ...m, text: accumulated } : m))
+                    prev.map((m) => (m.id === botMsgId ? { ...m, text: cleanAccumulated } : m))
                   );
                 }
               } catch {
@@ -119,7 +168,7 @@ export const NemotronAIAssistant: React.FC = () => {
               try {
                 const plainJson = JSON.parse(trimmed);
                 if (plainJson.reply) {
-                  accumulated = plainJson.reply;
+                  accumulated = plainJson.reply.replace(/[\u4e00-\u9fff]/g, ' মধ্যে ');
                   setMessages((prev) =>
                     prev.map((m) => (m.id === botMsgId ? { ...m, text: accumulated } : m))
                   );
@@ -150,7 +199,7 @@ export const NemotronAIAssistant: React.FC = () => {
           m.id === botMsgId
             ? {
                 ...m,
-                text: `নমস্কার, সংযোগে সাময়িক সমস্যা হচ্ছে। জরুরি তথ্যের জন্য আমাদের ২৪/৭ হেল্পলাইনে কল করুন: ${TMF_META.contacts.helplines[0]}`
+                text: `নমস্কার, সরাসরি তথ্যের জন্য আমাদের ২৪/৭ হেল্পলাইনে কল করুন: ${TMF_META.contacts.helplines[0]}`
               }
             : m
         )
@@ -161,7 +210,7 @@ export const NemotronAIAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 left-6 z-50">
+    <div className="fixed bottom-6 left-4 sm:left-6 z-40">
       {/* Floating Trigger Button */}
       {!isOpen && (
         <motion.button
@@ -170,7 +219,7 @@ export const NemotronAIAssistant: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2.5 px-4 py-3.5 rounded-full bg-linear-to-r from-[#1B3B2B] via-[#26533D] to-[#1B3B2B] text-white shadow-2xl shadow-black/30 border border-emerald-400/30 cursor-pointer group"
+          className="flex items-center justify-center p-3.5 sm:px-4 sm:py-3.5 rounded-full bg-linear-to-r from-[#1B3B2B] via-[#26533D] to-[#1B3B2B] text-white shadow-2xl shadow-black/30 border border-emerald-400/30 cursor-pointer group"
           aria-label="Open 24/7 AI Assistant"
         >
           <div className="relative">
@@ -178,10 +227,10 @@ export const NemotronAIAssistant: React.FC = () => {
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full" />
           </div>
-          <span className="text-xs font-bold font-['Plus_Jakarta_Sans'] tracking-wide">
+          <span className="hidden sm:inline text-xs font-bold font-['Plus_Jakarta_Sans'] tracking-wide ml-2">
             24/7 AI Assistant
           </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 font-mono flex items-center gap-0.5">
+          <span className="hidden sm:inline-flex text-[10px] px-1.5 py-0.5 rounded-md bg-amber-400/20 text-amber-300 font-mono items-center gap-0.5 ml-1.5">
             <Zap className="w-2.5 h-2.5 fill-amber-300" />
             Lightning 30B
           </span>

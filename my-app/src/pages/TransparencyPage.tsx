@@ -75,10 +75,10 @@ export const TransparencyPage: React.FC<TransparencyPageProps> = ({ onOpenDocume
                       groups
                     </span>
                     <div>
-                      <h3 className="font-stat-lg text-3xl sm:text-4xl text-white">142</h3>
+                      <h3 className="font-stat-lg text-3xl sm:text-4xl text-white">15</h3>
                       <span className="font-label-caps text-xs text-indigo-200">K+</span>
                     </div>
-                    <p className="font-body-base text-xs text-slate-300">Lives impacted in FY23-24</p>
+                    <p className="font-body-base text-xs text-slate-300">Direct Lives Impacted</p>
                   </div>
 
                   {/* Overhead Bar */}
@@ -135,7 +135,7 @@ export const TransparencyPage: React.FC<TransparencyPageProps> = ({ onOpenDocume
                 </div>
               </div>
               <div className="pt-6 mt-6 flex items-center justify-between border-t border-slate-100 font-mono text-xs text-[#64748B]">
-                <span className="font-bold">AAATD1234E</span>
+                <span className="font-bold">AAPAT4811J</span>
                 <span className="material-symbols-outlined text-[#4b41e1] group-hover:translate-x-1 transition-transform">
                   arrow_forward
                 </span>
@@ -245,7 +245,7 @@ export const TransparencyPage: React.FC<TransparencyPageProps> = ({ onOpenDocume
                             </div>
                           </div>
                         </div>
-                        <button className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
+                        <button aria-label="Download FY 2023-24 Annual Report" className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
                           <span className="material-symbols-outlined">download</span>
                         </button>
                       </div>
@@ -277,7 +277,7 @@ export const TransparencyPage: React.FC<TransparencyPageProps> = ({ onOpenDocume
                             </div>
                           </div>
                         </div>
-                        <button className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
+                        <button aria-label="Download FY 2022-23 Annual Report" className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
                           <span className="material-symbols-outlined">download</span>
                         </button>
                       </div>
@@ -309,7 +309,7 @@ export const TransparencyPage: React.FC<TransparencyPageProps> = ({ onOpenDocume
                             </div>
                           </div>
                         </div>
-                        <button className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
+                        <button aria-label="Download Foundation Trust Deed &amp; Bylaws" className="w-12 h-12 rounded-full border border-slate-300 flex items-center justify-center text-[#191c1e] group-hover:bg-[#111827] group-hover:text-white transition-all shrink-0">
                           <span className="material-symbols-outlined">download</span>
                         </button>
                       </div>

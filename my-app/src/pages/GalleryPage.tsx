@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { GridSweepContainer, GridSweepItem } from '../components/motion/GridSweep';
 import { MotionFocusGroup, MotionFocusItem } from '../components/motion/MotionFocus';
 import type { PageId } from '../types';
@@ -19,7 +20,7 @@ interface PhotoItem {
 
 const GALLERY_PHOTOS: PhotoItem[] = [
   { id: '1', url: '/tmf-assets/real-field-photos/tmf-field-1.jpeg', title: 'Free Child Remedial Center', category: 'Education', location: 'Tribeni Hub', caption: 'Students participating in morning remedial classes with interactive learning boards.' },
-  { id: '2', url: '/tmf-assets/real-field-photos/tmf-field-2.jpeg', title: 'Foundational Literacy Batch', category: 'Education', location: 'Mogra Center', caption: 'Rural children learning Bengali alphabet writing and arithmetic.' },
+  { id: '2', url: '/tmf-assets/generated/story_student_priya.jpg', title: 'Foundational Literacy Batch', category: 'Education', location: 'Mogra Center', caption: 'Rural children learning Bengali alphabet writing and arithmetic.' },
   { id: '3', url: '/tmf-assets/real-field-photos/tmf-field-3.jpg', title: 'Infant Winter Bedding Distribution', category: 'Winter Relief', location: 'Dhaniakhali', caption: 'Direct distribution of zipped infant mattress kits and warm blankets to rural mothers.' },
   { id: '4', url: '/tmf-assets/real-field-photos/tmf-field-4.jpg', title: 'Annapurna Cooked Meal Distribution', category: 'Community Feeding', location: 'Village Center', caption: 'Nutritious hot meals served to destitute elders and children.' },
   { id: '5', url: '/tmf-assets/real-field-photos/tmf-field-5.jpg', title: 'Free Health & Eye Screening Camp', category: 'Healthcare', location: 'Mogra Camp', caption: 'Free pediatric diagnostics, eye tests, and generic medicines.' },
@@ -70,6 +71,19 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onOpenDonate }) => {
   const filtered = selectedCat === 'All'
     ? GALLERY_PHOTOS
     : GALLERY_PHOTOS.filter(p => p.category === selectedCat);
+
+  useEffect(() => {
+    if (!previewPhoto) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPreviewPhoto(null);
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [previewPhoto]);
 
   return (
     <div className="w-full pt-20 bg-[#f7f9fb] min-h-screen text-[#191c1e]">
@@ -185,9 +199,15 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onOpenDonate }) => {
       </section>
 
       {/* Lightbox Preview Modal */}
-      {previewPhoto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-3xl w-full shadow-2xl relative my-auto max-h-[88vh] flex flex-col overflow-hidden">
+      {previewPhoto && typeof document !== 'undefined' && createPortal(
+        <div
+          onClick={() => setPreviewPhoto(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto cursor-zoom-out"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl p-5 sm:p-7 max-w-3xl w-full shadow-2xl relative my-auto max-h-[88vh] flex flex-col overflow-hidden cursor-default"
+          >
             <button
               onClick={() => setPreviewPhoto(null)}
               className="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-[#191c1e] hover:bg-slate-200 cursor-pointer z-20 shadow-xs"
@@ -245,7 +265,8 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onOpenDonate }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { STORIES_OF_CHANGE } from '../data/foundationData';
 import { GridSweepContainer, GridSweepItem } from '../components/motion/GridSweep';
 import { MotionFocusGroup, MotionFocusItem } from '../components/motion/MotionFocus';
@@ -13,12 +14,25 @@ export const ImpactStoriesPage: React.FC<ImpactStoriesPageProps> = ({ onOpenDona
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
 
-  const categories = ['All', 'Healthcare', 'Education', 'Women Empowerment', 'Farming & Livelihood'];
+  const categories = ['All', 'Healthcare', 'Education', 'Winter Relief', 'Women Empowerment', 'Farming & Livelihood'];
 
   const filteredStories =
     selectedCategory === 'All'
       ? STORIES_OF_CHANGE
       : STORIES_OF_CHANGE.filter((s) => s.category === selectedCategory);
+
+  useEffect(() => {
+    if (!activeStory) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveStory(null);
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeStory]);
 
   return (
     <div className="w-full pt-20 bg-[#f7f9fb] min-h-screen text-[#191c1e]">
@@ -136,9 +150,15 @@ export const ImpactStoriesPage: React.FC<ImpactStoriesPageProps> = ({ onOpenDona
       </section>
 
       {/* Story Full Modal */}
-      {activeStory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      {activeStory && typeof document !== 'undefined' && createPortal(
+        <div
+          onClick={() => setActiveStory(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm cursor-zoom-out"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl relative max-h-[90vh] overflow-y-auto cursor-default"
+          >
             <button
               onClick={() => setActiveStory(null)}
               className="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#191c1e] hover:bg-slate-200 cursor-pointer z-10"
@@ -212,7 +232,8 @@ export const ImpactStoriesPage: React.FC<ImpactStoriesPageProps> = ({ onOpenDona
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

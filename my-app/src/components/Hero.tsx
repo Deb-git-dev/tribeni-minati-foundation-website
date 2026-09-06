@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TMF_META } from '../data/tmfVerifiedData';
 import { MotionColumn } from './motion/MotionColumn';
 import { MotionFocusGroup, MotionFocusItem } from './motion/MotionFocus';
 import { ShaderGradientHero } from './animations/ShaderGradientHero';
 import { AnimatedIcon } from './animations/AnimatedIcon';
 import { TiltCard3D } from './TiltCard3D';
+import { SplineScene3D } from './SplineScene3D';
 
 interface HeroProps {
   onOpenDonate: () => void;
@@ -12,6 +13,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenDonate, onExploreWork }) => {
+  const [activeMedia, setActiveMedia] = useState<'photo' | '3d'>('photo');
+
   return (
     <>
       {/* Hero Section — HorizonX MotionColumn Parallax + Shader Gradient + Integrated 3D Stack */}
@@ -26,9 +29,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenDonate, onExploreWork }) => {
             <MotionColumn speed={0.05} className="lg:col-span-6 flex flex-col gap-6">
               
               {/* Badge with Animated Sparkle Icon */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full border border-border-subtle shadow-sm w-max hover:shadow-md transition-shadow">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-white/80 backdrop-blur-md rounded-full border border-border-subtle shadow-sm max-w-full hover:shadow-md transition-shadow">
                 <AnimatedIcon preset="sparkle" size={16} fallbackMaterialIcon="star" />
-                <span className="font-label-caps text-xs text-[#45464d]">
+                <span className="font-label-caps text-[11px] sm:text-xs text-[#45464d] truncate">
                   Govt. Reg: {TMF_META.newRegNo} | 80G Certified
                 </span>
               </div>
@@ -70,36 +73,65 @@ export const Hero: React.FC<HeroProps> = ({ onOpenDonate, onExploreWork }) => {
 
             {/* Right Media Section: Fully Integrated 3D Perspective Stack */}
             <MotionColumn speed={-0.05} className="lg:col-span-6 relative">
-              <TiltCard3D intensity={12} className="w-full">
+              <TiltCard3D intensity={activeMedia === 'photo' ? 12 : 0} className="w-full">
                 <div className="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)] bg-[#f2f4f6] p-2 group hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.2)] transition-all duration-500">
                   
-                  {/* Verified Documentary Field Photo */}
-                  <img
-                    src="/tmf-assets/generated/hero_child_education.jpg"
-                    alt="Free Child Remedial Education Center"
-                    className="w-full h-full object-cover rounded-[1.5rem] group-hover:scale-105 transition-transform duration-700"
-                  />
-                  
-                  {/* Glass Bezel Ring Overlay */}
-                  <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-black/10 pointer-events-none" />
-                  
-                  {/* 3D Floating Focus Badge */}
-                  <div className="absolute bottom-8 left-4 sm:-left-4 z-20 bg-white/95 backdrop-blur-xl p-4 rounded-2xl shadow-2xl border border-white/60 flex items-center gap-4 transform hover:scale-110 hover:-translate-y-2 transition-all duration-300 cursor-default">
-                    <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[#4b41e1] animate-bounce">
-                        school
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-label-caps text-[10px] text-[#45464d] uppercase">Focus Area</p>
-                      <p className="font-headline-md text-base font-bold text-[#191c1e]">Child Education</p>
-                    </div>
-                  </div>
+                  {/* Photo Mode */}
+                  {activeMedia === 'photo' && (
+                    <>
+                      <img
+                        src="/tmf-assets/generated/hero_child_education.jpg"
+                        alt="Free Child Remedial Education Center"
+                        className="w-full h-full object-cover rounded-[1.5rem] group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 rounded-[1.5rem] ring-1 ring-inset ring-black/10 pointer-events-none" />
+                      
+                      {/* Focus Area Badge */}
+                      <div className="absolute bottom-6 left-4 sm:left-6 z-20 bg-white/95 backdrop-blur-xl p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-white/60 flex items-center gap-3.5">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-indigo-50 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[#4b41e1]">school</span>
+                        </div>
+                        <div>
+                          <p className="font-label-caps text-[9px] sm:text-[10px] text-[#45464d] uppercase">Focus Area</p>
+                          <p className="font-headline-md text-sm sm:text-base font-bold text-[#191c1e]">Child Education</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
-                  {/* 3D Live Indicator Badge */}
-                  <div className="absolute top-6 right-6 z-20 pointer-events-none flex items-center gap-2 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 text-[11px] font-mono text-emerald-300 shadow-lg">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span>3D Interactive Depth</span>
+                  {/* 3D WebGL Canvas Mode */}
+                  {activeMedia === '3d' && (
+                    <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-[#09110d] via-[#11241a] to-[#0a1610] relative">
+                      <SplineScene3D className="w-full h-full" />
+                      <div className="absolute bottom-6 left-4 sm:left-6 z-20 pointer-events-none bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10 text-xs font-mono text-emerald-300">
+                        Living 3D Emblem Matrix
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Media Mode Toggle */}
+                  <div className="absolute top-4 right-4 z-30 flex items-center bg-black/75 backdrop-blur-md p-1 rounded-full border border-white/20 shadow-xl text-[10px] font-mono">
+                    <button
+                      onClick={() => setActiveMedia('photo')}
+                      className={`px-3 py-1 rounded-full transition-all cursor-pointer ${
+                        activeMedia === 'photo'
+                          ? 'bg-white text-slate-900 font-bold shadow-sm'
+                          : 'text-white/70 hover:text-white'
+                      }`}
+                    >
+                      Field Photo
+                    </button>
+                    <button
+                      onClick={() => setActiveMedia('3d')}
+                      className={`px-3 py-1 rounded-full transition-all flex items-center gap-1 cursor-pointer ${
+                        activeMedia === '3d'
+                          ? 'bg-emerald-500 text-white font-bold shadow-sm'
+                          : 'text-white/70 hover:text-white'
+                      }`}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-ping" />
+                      <span>3D Live</span>
+                    </button>
                   </div>
 
                 </div>

@@ -34,20 +34,18 @@ export const MinatiBento3D: React.FC = () => {
                       </span>
                     </div>
                     
-                    {/* Official Cropped Emblem Badge */}
-                    <div className="w-12 h-12 rounded-xl bg-white p-1.5 border border-border-subtle shadow-xs">
-                      <img
-                        src={item.badgeImg}
-                        alt={`${item.word} Badge`}
-                        className="w-full h-full object-contain"
-                      />
+                    {/* Official Letter & Emblem Monogram */}
+                    <div className="w-12 h-12 rounded-xl bg-[#f7f9fb] border border-border-subtle shadow-xs flex items-center justify-center group-hover:border-[#4b41e1]/30 transition-colors">
+                      <span className="font-display-lg text-lg font-extrabold text-[#1B3B2B] group-hover:text-[#4b41e1] transition-colors">
+                        {item.letter}
+                      </span>
                     </div>
                   </div>
 
                   <h3 className="font-headline-md text-2xl font-bold text-[#191c1e] mb-2 flex items-center gap-2">
                     <span>{item.word}</span>
-                    <span className="text-xs font-mono text-[#4b41e1] bg-indigo-50 px-2 py-0.5 rounded-full font-bold">
-                      {item.letter}
+                    <span className="text-[11px] font-mono text-[#4b41e1] bg-indigo-50 px-2.5 py-0.5 rounded-full font-bold">
+                      Pillar {item.letter}
                     </span>
                   </h3>
 

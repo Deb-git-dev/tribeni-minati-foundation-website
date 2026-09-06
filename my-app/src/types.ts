@@ -52,7 +52,7 @@ export interface CampaignItem {
 export interface StoryItem {
   id: string;
   title: string;
-  category: 'Healthcare' | 'Education' | 'Women Empowerment' | 'Farming & Livelihood';
+  category: 'Healthcare' | 'Education' | 'Women Empowerment' | 'Farming & Livelihood' | 'Winter Relief';
   location: string;
   beneficiaryName: string;
   age?: number;

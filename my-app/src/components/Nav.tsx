@@ -32,6 +32,33 @@ export const Nav: React.FC<NavProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-dropdown="more"]')) {
+        setMoreDropdownOpen(false);
+      }
+      if (!target.closest('[data-dropdown="user"]')) {
+        setUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   const navLinks: { id: PageId; label: string }[] = [
     { id: 'about', label: 'About M-I-N-A-T-I' },
     { id: 'programs', label: 'Initiatives' },
@@ -130,11 +157,13 @@ export const Nav: React.FC<NavProps> = ({
 
             {/* More Dropdown (Gallery, Volunteer, 80G Portal) */}
             <div
+              data-dropdown="more"
               className="relative"
               onMouseEnter={() => setMoreDropdownOpen(true)}
               onMouseLeave={() => setMoreDropdownOpen(false)}
             >
               <button
+                onClick={() => setMoreDropdownOpen((prev) => !prev)}
                 className={`text-sm font-semibold flex items-center gap-1 transition-colors cursor-pointer py-1 ${
                   ['gallery', 'volunteer', 'donor-portal'].includes(currentPage)
                     ? 'text-[#4b41e1] font-bold'
@@ -142,11 +171,11 @@ export const Nav: React.FC<NavProps> = ({
                 }`}
               >
                 <span>Explore More</span>
-                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+                <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-200 ${moreDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {moreDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-72 rounded-2xl bg-white border border-border-subtle shadow-2xl p-2 z-50 space-y-1">
+                <div className="absolute top-full right-0 mt-1 w-72 rounded-2xl bg-white border border-border-subtle shadow-2xl p-2 z-50 space-y-1 before:absolute before:-top-2 before:left-0 before:right-0 before:h-2 before:content-['']">
                   {moreLinks.map((item) => (
                     <button
                       key={item.id}
@@ -275,7 +304,7 @@ export const Nav: React.FC<NavProps> = ({
 
       {/* Mobile Drawer with ALL Pages */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-border-subtle shadow-2xl px-6 py-5 space-y-4 max-h-[85vh] overflow-y-auto">
+        <div className="lg:hidden fixed inset-x-0 top-full h-[calc(100vh-64px)] bg-white border-t border-border-subtle shadow-2xl px-6 py-6 overflow-y-auto z-50 flex flex-col justify-between">
           <div className="space-y-1">
             {[...navLinks, ...moreLinks.map(m => ({ id: m.id, label: m.label }))].map((link) => (
               <button
@@ -284,7 +313,7 @@ export const Nav: React.FC<NavProps> = ({
                   onNavigate(link.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full p-3 rounded-xl text-left text-sm font-semibold flex items-center justify-between transition-colors ${
+                className={`w-full p-3.5 rounded-xl text-left text-sm font-semibold flex items-center justify-between transition-colors ${
                   currentPage === link.id
                     ? 'bg-indigo-50 text-[#4b41e1] font-bold'
                     : 'text-[#191c1e] hover:bg-slate-50'
@@ -296,18 +325,18 @@ export const Nav: React.FC<NavProps> = ({
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-100 space-y-2">
+          <div className="pt-4 border-t border-slate-100 space-y-3 pb-8">
             <button
               onClick={() => {
                 onOpenDonate();
                 setMobileMenuOpen(false);
               }}
-              className="w-full py-3.5 bg-[#F59E0B] text-[#111827] font-bold rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
+              className="w-full py-4 bg-[#F59E0B] text-[#111827] font-bold rounded-2xl shadow-md flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
             >
               Donate Now (80G Tax Saved)
             </button>
 
-            <div className="text-center font-mono text-[11px] text-[#64748B] pt-1">
+            <div className="text-center font-mono text-[11px] text-[#64748B]">
               Helpline: {TMF_META.contacts.secretary}
             </div>
           </div>

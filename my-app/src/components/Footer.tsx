@@ -122,6 +122,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDonate }) => {
                 >
                   Secretariat Contact
                 </button>
+                {onOpenDonate && (
+                  <button
+                    onClick={onOpenDonate}
+                    className="text-body-base text-sm font-bold text-[#b45309] hover:text-[#78350f] transition-colors text-left sm:text-right cursor-pointer"
+                  >
+                    Donate (80G Certified)
+                  </button>
+                )}
               </div>
             </div>
 
@@ -132,17 +140,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDonate }) => {
           </div>
         </div>
       </footer>
-
-      {/* Persistent Mobile Bottom Donate Bar (Stitch Specification) */}
-      <div className="fixed bottom-6 right-6 lg:hidden z-50">
-        <button
-          onClick={onOpenDonate}
-          className="px-6 py-3.5 bg-[#F59E0B] text-[#111827] font-bold rounded-full shadow-2xl flex items-center gap-2 text-xs uppercase tracking-wider cursor-pointer active:scale-95 transition-all"
-        >
-          <span className="material-symbols-outlined text-[18px]">favorite</span>
-          <span>Donate Now (80G Tax Saved)</span>
-        </button>
-      </div>
     </>
   );
 };
