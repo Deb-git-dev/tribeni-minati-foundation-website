@@ -13,60 +13,54 @@ interface PhotoItem {
   id: string;
   url: string;
   title: string;
-  category: 'Education' | 'Winter Relief' | 'Healthcare' | 'Women SHG' | 'Community Feeding' | 'Facebook Feed' | 'Instagram Archive';
+  category: 'Education' | 'Winter Relief' | 'Healthcare' | 'Women SHG' | 'Community Feeding' | 'On-Ground Proof';
   location: string;
   caption: string;
 }
 
 const GALLERY_PHOTOS: PhotoItem[] = [
-  { id: '1', url: '/tmf-assets/real-field-photos/tmf-field-1.jpeg', title: 'Free Child Remedial Center', category: 'Education', location: 'Tribeni Hub', caption: 'Students participating in morning remedial classes with interactive learning boards.' },
-  { id: '2', url: '/tmf-assets/generated/story_student_priya.jpg', title: 'Foundational Literacy Batch', category: 'Education', location: 'Mogra Center', caption: 'Rural children learning Bengali alphabet writing and arithmetic.' },
-  { id: '3', url: '/tmf-assets/real-field-photos/tmf-field-3.jpg', title: 'Infant Winter Bedding Distribution', category: 'Winter Relief', location: 'Dhaniakhali', caption: 'Direct distribution of zipped infant mattress kits and warm blankets to rural mothers.' },
-  { id: '4', url: '/tmf-assets/real-field-photos/tmf-field-4.jpg', title: 'Annapurna Cooked Meal Distribution', category: 'Community Feeding', location: 'Village Center', caption: 'Nutritious hot meals served to destitute elders and children.' },
-  { id: '5', url: '/tmf-assets/real-field-photos/tmf-field-5.jpg', title: 'Free Health & Eye Screening Camp', category: 'Healthcare', location: 'Mogra Camp', caption: 'Free pediatric diagnostics, eye tests, and generic medicines.' },
-  { id: '6', url: '/tmf-assets/real-field-photos/tmf-field-6.jpeg', title: 'Science & Drawing Workshop', category: 'Education', location: 'Tribeni Hub', caption: 'Practical model building and drawing sessions for rural youth.' },
-  { id: '7', url: '/tmf-assets/real-field-photos/tmf-field-7.jpeg', title: 'Girls Mentorship Cell', category: 'Education', location: 'Tribeni Hub', caption: 'Adolescent girls guidance program ensuring retention in formal schooling.' },
-  { id: '8', url: '/tmf-assets/real-field-photos/tmf-field-8.jpeg', title: 'Jotkamal Youth Sangha Coaching', category: 'Education', location: 'Jotkamal', caption: 'Weekly after-school academic support for primary students.' },
-  { id: '9', url: '/tmf-assets/real-field-photos/tmf-field-9.jpeg', title: 'School Stationery & Books Kit', category: 'Education', location: 'Tribeni Hub', caption: 'Free distribution of notebooks, school bags, and geometry boxes.' },
-  { id: '10', url: '/tmf-assets/real-field-photos/tmf-field-10.jpeg', title: 'Foundation Headquarters Gathering', category: 'Community Feeding', location: 'Tribeni HQ', caption: 'Community assembly and annual review meeting with village elders.' },
-  { id: '11', url: '/tmf-assets/real-field-photos/tmf-field-11.jpeg', title: 'Volunteers Distributing Blankets', category: 'Winter Relief', location: 'Tarakeswar Sector', caption: 'Insulated blankets handed over to vulnerable villagers.' },
-  { id: '12', url: '/tmf-assets/real-field-photos/tmf-field-12.jpeg', title: 'Women Empowerment Handloom', category: 'Women SHG', location: 'Swabhiman Center', caption: 'Rural women practicing handloom and tailoring skills.' },
-  { id: '13', url: '/tmf-assets/real-field-photos/tmf-field-13.jpeg', title: 'Child Nutrition & Milk Drive', category: 'Community Feeding', location: 'Tribeni Ward', caption: 'Nutritious milk and breakfast distribution for children.' },
-  { id: '14', url: '/tmf-assets/real-field-photos/tmf-field-14.jpeg', title: 'Relief Logistics Deployment', category: 'Winter Relief', location: 'Gopinagar Belt', caption: 'Volunteers coordinating emergency relief vehicle dispatch.' },
-  { id: '15', url: '/tmf-assets/real-field-photos/tmf-field-15.jpeg', title: 'Creative Drawing Class', category: 'Education', location: 'Coaching Hub', caption: 'Children displaying their hand-drawn art and sketches.' },
-  { id: '16', url: '/tmf-assets/real-field-photos/tmf-field-16.jpeg', title: 'Voluntary Blood Donation Camp', category: 'Healthcare', location: 'District Health Unit', caption: 'Life-saving voluntary blood donation camp for thalassemia patients.' },
-  { id: '17', url: '/tmf-assets/real-field-photos/tmf-field-17.jpeg', title: 'Elderly Relief & Care Support', category: 'Winter Relief', location: 'Hooghly Rural', caption: 'Specialized blanket and care package handovers to destitute seniors.' },
-  { id: '18', url: '/tmf-assets/real-field-photos/tmf-field-18.jpeg', title: 'Women Self-Help Tailoring Unit', category: 'Women SHG', location: 'Tribeni Center', caption: 'Garment stitching creating micro-entrepreneurship livelihood.' },
-  { id: '19', url: '/tmf-assets/real-field-photos/tmf-field-19.jpeg', title: 'Maternal Bedding Demonstration', category: 'Healthcare', location: 'Mother Care Center', caption: 'Demonstrating zippered mosquito-net bedding for infant safety.' },
-  { id: '20', url: '/tmf-assets/real-field-photos/tmf-field-20.jpeg', title: 'Foundation Day Community Meet', category: 'Community Feeding', location: 'Tribeni Office', caption: 'Annual celebration honoring grassroots volunteers and community workers.' },
-  { id: '21', url: '/tmf-assets/real-field-photos/tmf-field-21.jpeg', title: 'School Bag & Slate Handover', category: 'Education', location: 'Minati Pathshala', caption: 'Smiles on children receiving new school bags and study materials.' },
-  { id: '22', url: '/tmf-assets/real-field-photos/tmf-field-22.jpeg', title: 'Tribal Settlement Blanket Drive', category: 'Winter Relief', location: 'Tribal Belt', caption: 'Reaching deep mud hamlets in remote rural Bengal with winter warmers.' },
-  { id: '23', url: '/tmf-assets/real-field-photos/tmf-field-23.jpeg', title: 'Emergency Medical First Aid Unit', category: 'Healthcare', location: 'Rural Health Desk', caption: 'On-spot emergency health assistance and generic medicines.' },
-  { id: '24', url: '/tmf-assets/real-field-photos/tmf-field-24.jpeg', title: 'Youth Volunteer Mobilization', category: 'Education', location: 'Youth Desk', caption: 'Energetic youth brigade coordinating educational and relief drives.' },
-  { id: '25', url: '/tmf-assets/real-field-photos/tmf-field-25.jpeg', title: 'Mother & Infant Health Pack', category: 'Healthcare', location: 'Maternal Wing', caption: 'High-protein baby food, sanitized linen, and neonatal health counseling.' },
-  { id: '26', url: '/tmf-assets/real-field-photos/tmf-field-26.jpeg', title: 'Smiling Faces of Minati Coaching', category: 'Education', location: 'Hooghly Hub', caption: '"...your smile, our reward..." — children showing their certificates.' },
-  // Downloaded Facebook Timeline & Instagram Field Assets
-  { id: 'fb-1', url: '/tmf-assets/downloaded/fb_photo_2.jpg', title: 'Official Foundation Event Flex', category: 'Facebook Feed', location: 'Tribeni Office', caption: 'Official Foundation Flex Banner and registration details.' },
-  { id: 'fb-2', url: '/tmf-assets/downloaded/fb_post_img_12.jpg', title: 'Facebook Live Coaching Session', category: 'Facebook Feed', location: 'Mogra Pathshala', caption: 'Ground photojournalism update from daily remedial coaching center.' },
-  { id: 'fb-3', url: '/tmf-assets/downloaded/fb_post_img_13.jpg', title: 'Winter Blanket Camp Handover', category: 'Facebook Feed', location: 'Dhaniakhali', caption: 'Community blanket distribution captured live on Facebook.' },
-  { id: 'fb-4', url: '/tmf-assets/downloaded/fb_post_img_14.jpg', title: 'Volunteer Relief Dispatch', category: 'Facebook Feed', location: 'Gopinagar', caption: 'Field volunteers packing and loading relief supplies.' },
-  { id: 'fb-5', url: '/tmf-assets/downloaded/fb_post_img_15.jpg', title: 'Community Mid-Day Annapurna', category: 'Facebook Feed', location: 'Tribeni Belt', caption: 'Cooked midday food distribution to children and seniors.' },
-  { id: 'fb-6', url: '/tmf-assets/downloaded/fb_post_img_16.jpg', title: 'Health Diagnostic Screening Camp', category: 'Facebook Feed', location: 'Rural Outreaches', caption: 'Free health consultation and blood pressure screening.' },
-  { id: 'ig-1', url: '/tmf-assets/downloaded/ig_media_2.jpg', title: 'Instagram Field Dispatch: Education', category: 'Instagram Archive', location: 'Hooghly Learning Center', caption: 'Educational mentoring update shared with @minatifoundation community.' },
-  { id: 'ig-2', url: '/tmf-assets/downloaded/ig_media_3.jpg', title: 'Instagram Field Dispatch: Winter Relief', category: 'Instagram Archive', location: 'Dhaniakhali Mud Hamlets', caption: 'Winter kit handover documented on Instagram.' },
-  { id: 'ig-3', url: '/tmf-assets/downloaded/ig_media_4.jpg', title: 'Instagram Field Dispatch: Health Camp', category: 'Instagram Archive', location: 'Mogra Sector', caption: 'Free doctor consultation and medicine distribution.' },
-  { id: 'ig-4', url: '/tmf-assets/downloaded/ig_media_6.jpg', title: 'Instagram Field Dispatch: Women SHG', category: 'Instagram Archive', location: 'Swabhiman Center', caption: 'Women tailoring and livelihood batch in session.' },
-  { id: 'ig-5', url: '/tmf-assets/downloaded/ig_media_7.jpg', title: 'Instagram Field Dispatch: Nutrition Pack', category: 'Instagram Archive', location: 'Tribeni Ward', caption: 'Nutrition packet distribution for infants and elderly.' },
-  { id: 'ig-6', url: '/tmf-assets/downloaded/ig_media_8.jpg', title: 'Instagram Field Dispatch: Youth Desk', category: 'Instagram Archive', location: 'Tribeni HQ', caption: 'Youth volunteers preparing educational kits for field schools.' },
-  { id: 'ig-7', url: '/tmf-assets/downloaded/ig_media_10.jpg', title: 'Instagram Field Dispatch: Annual Review', category: 'Instagram Archive', location: 'Corporate Office', caption: 'Board members and volunteers reviewing field impact metrics.' },
-  { id: 'ig-8', url: '/tmf-assets/downloaded/ig_media_12.jpg', title: 'Instagram Field Dispatch: Child Smile', category: 'Instagram Archive', location: 'Hooghly Hub', caption: 'Pure happiness: children receiving new school bags and slates.' },
+  // Education
+  { id: 'edu-1', url: '/tmf-assets/generated/gallery_education_stem.jpg', title: 'Interactive Science & Math Workshop', category: 'Education', location: 'Mogra Learning Center', caption: 'Rural primary students exploring hands-on science models and abacus arithmetic.' },
+  { id: 'edu-2', url: '/tmf-assets/generated/gallery_school_supplies.jpg', title: 'School Bag & Study Kits Distribution', category: 'Education', location: 'Tribeni Hub', caption: 'First-generation learners joyfully receiving new backpacks, Bengali exercise books, and geometry kits.' },
+  { id: 'edu-3', url: '/tmf-assets/generated/story_student_priya.jpg', title: 'Foundational Bengali Literacy Batch', category: 'Education', location: 'Minati Pathshala, Mogra', caption: 'After-school remedial coaching helping children master reading and numeracy.' },
+  { id: 'edu-4', url: '/tmf-assets/generated/education-banyan.jpg', title: 'Open-Air Heritage Schooling', category: 'Education', location: 'Dhaniakhali Rural', caption: 'Dedicated community classes under the village banyan tree for underserved youth.' },
+  { id: 'edu-5', url: '/tmf-assets/generated/hero_child_education.jpg', title: 'First-Generation Learner Mentorship', category: 'Education', location: 'Hooghly Rural Belt', caption: 'Individualized academic attention ensuring school retention and zero dropout.' },
+
+  // Winter Relief
+  { id: 'wnt-1', url: '/tmf-assets/generated/gallery_winter_elderly.jpg', title: 'Winter Blanket & Quilt Handover', category: 'Winter Relief', location: 'Tarakeswar Sector', caption: 'Volunteers wrapping thick insulated blankets around vulnerable village elders on chilly mornings.' },
+  { id: 'wnt-2', url: '/tmf-assets/generated/winter_infant_bedding.jpg', title: 'Infant Warm Bedding & Mosquito Net Drive', category: 'Winter Relief', location: 'Dhaniakhali Mud Hamlets', caption: 'Handing over zippered infant mattress kits and warm wraps to rural mothers.' },
+  { id: 'wnt-3', url: '/tmf-assets/generated/winter-relief.jpg', title: 'Cold Wave Emergency Relief', category: 'Winter Relief', location: 'Hooghly Outreaches', caption: 'Direct door-to-door distribution of woolen wear to elderly and destitute families.' },
+  { id: 'wnt-4', url: '/tmf-assets/downloaded/fb_post_img_12.jpg', title: 'Stage Handover: Infant Mattress Kits', category: 'Winter Relief', location: 'Sajal Mancha, Khanpur', caption: 'Real ground documentary: distribution of protective infant bedding kits to village mothers.' },
+  { id: 'wnt-5', url: '/tmf-assets/downloaded/fb_post_img_13.jpg', title: 'Mother & Newborn Care Kit Delivery', category: 'Winter Relief', location: 'Khanpur Durgatala', caption: 'Executive committee members presenting sanitized bedding packets to mothers.' },
+
+  // Healthcare
+  { id: 'hlth-1', url: '/tmf-assets/generated/gallery_health_pediatric.jpg', title: 'Free Pediatric & Maternal Health Camp', category: 'Healthcare', location: 'Rural Hooghly Clinic', caption: 'Free pediatric diagnostics, growth monitoring, and generic medicine distribution by medical doctors.' },
+  { id: 'hlth-2', url: '/tmf-assets/generated/rural_medical_camp.jpg', title: 'Comprehensive Village Health Screening', category: 'Healthcare', location: 'Mogra Outreach', caption: 'On-spot blood pressure, sugar screening, and general physician consultations.' },
+  { id: 'hlth-3', url: '/tmf-assets/generated/blood_donation_camp.jpg', title: 'Voluntary Blood Donation Drive', category: 'Healthcare', location: 'Tribeni Sub-Division', caption: 'Life-saving community blood donation drive in aid of regional thalassemia patients.' },
+  { id: 'hlth-4', url: '/tmf-assets/generated/story_elderly_artisan.jpg', title: 'Artisan Eye Screening & Spectacles Support', category: 'Healthcare', location: 'Dhaniakhali Weavers Hub', caption: 'Free refractive eye examination and corrective spectacles for aging rural artisans.' },
+  { id: 'hlth-5', url: '/tmf-assets/generated/rural-health.jpg', title: 'First Aid & Diagnostic Guidance Unit', category: 'Healthcare', location: 'Community Health Desk', caption: 'Preventative healthcare awareness and referral assistance for rural families.' },
+
+  // Women SHG
+  { id: 'shg-1', url: '/tmf-assets/generated/gallery_women_handicraft.jpg', title: 'Swabhiman Handicraft & Kantha Workshop', category: 'Women SHG', location: 'Swabhiman Center, Tribeni', caption: 'Rural women training in traditional Kantha embroidery, jute bag crafting, and micro-enterprise.' },
+  { id: 'shg-2', url: '/tmf-assets/generated/women_tailoring_hub.jpg', title: 'Professional Tailoring Machine Batch', category: 'Women SHG', location: 'Livelihood Training Center', caption: 'Skill development through pedal and motor sewing machines for sustainable household income.' },
+  { id: 'shg-3', url: '/tmf-assets/generated/women-tailoring.jpg', title: 'Garment Stitching & Self-Reliance Cell', category: 'Women SHG', location: 'Tribeni Ward', caption: 'Mastering pattern cutting and garment stitching to foster financial independence.' },
+
+  // Community Feeding
+  { id: 'feed-1', url: '/tmf-assets/generated/gallery_community_kitchen.jpg', title: 'Annapurna Midday Meal Distribution', category: 'Community Feeding', location: 'Village Primary Hub', caption: 'Volunteers serving hot, nutritious khichdi and fresh meals on eco-friendly leaf plates.' },
+  { id: 'feed-2', url: '/tmf-assets/generated/community_food_relief.jpg', title: 'Community Nourishment Drive', category: 'Community Feeding', location: 'Tribeni Center', caption: 'Wholesome cooked food packages provided to destitute seniors and underprivileged children.' },
+
+  // On-Ground Proof
+  { id: 'og-1', url: '/tmf-assets/downloaded/fb_post_img_14.jpg', title: 'Field Volunteers Assembling Infant Kits', category: 'On-Ground Proof', location: 'Sajal Mancha, Khanpur', caption: 'Unedited ground photograph: local volunteers managing infant bedding distribution.' },
+  { id: 'og-2', url: '/tmf-assets/downloaded/fb_post_img_15.jpg', title: 'Elder Dignitary Presenting Bedding Kit', category: 'On-Ground Proof', location: 'Khanpur Ground', caption: 'Documented field photo: village elder presenting zippered bedding to a rural mother.' },
+  { id: 'og-3', url: '/tmf-assets/downloaded/fb_post_img_16.jpg', title: 'Newborn Bedding Handover Ceremony', category: 'On-Ground Proof', location: 'Sajal Mancha, Khanpur', caption: 'Unedited field record: committee member presenting protected bedding set to beneficiary.' },
+  { id: 'og-4', url: '/tmf-assets/real-field-photos/tmf-field-21.jpeg', title: 'Official Event Invitation (আমন্ত্রণ পত্র)', category: 'On-Ground Proof', location: 'Sajal Mancha, Khanpur', caption: 'Official Bengali printed invitation letter for the 20 Dec 2025 infant bedding event.' },
 ];
 
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onOpenDonate }) => {
   const [selectedCat, setSelectedCat] = useState<string>('All');
   const [previewPhoto, setPreviewPhoto] = useState<PhotoItem | null>(null);
 
-  const categories = ['All', 'Education', 'Winter Relief', 'Healthcare', 'Women SHG', 'Community Feeding', 'Facebook Feed', 'Instagram Archive'];
+  const categories = ['All', 'Education', 'Winter Relief', 'Healthcare', 'Women SHG', 'Community Feeding', 'On-Ground Proof'];
 
   const filtered = selectedCat === 'All'
     ? GALLERY_PHOTOS
@@ -94,7 +88,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onOpenDonate }) => {
           <div className="space-y-4 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 text-[#4b41e1] rounded-full text-xs font-bold font-label-caps uppercase tracking-wider">
               <span className="material-symbols-outlined text-[16px]">photo_library</span>
-              <span>40+ Verified Field &amp; Social Assets (FB &amp; IG Synced)</span>
+              <span>Verified Field &amp; Documentary Impact Records</span>
             </div>
 
             <h1 className="font-display-lg text-4xl sm:text-5xl lg:text-6xl text-[#191c1e] tracking-tight leading-tight">
