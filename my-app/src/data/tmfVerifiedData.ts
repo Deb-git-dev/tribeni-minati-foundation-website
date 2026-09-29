@@ -63,6 +63,9 @@ export const TMF_META = {
     accountNumber: '5894594000',
     ifsc: 'CBIN0283860',
     micr: '712016857',
+    upiId: '20260933445145-iservuqrsbrp@cbin',
+    upiIdAlt: '5894594000@cbin',
+    qrImage: '/tmf-assets/tmf-qr.jpeg',
     passbookDoc: '/tmf-assets/bank-account-of-tmf.pdf',
   },
   offices: {

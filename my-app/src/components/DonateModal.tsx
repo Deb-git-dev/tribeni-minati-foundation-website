@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, QrCode, CheckCircle2, ShieldCheck, ArrowRight, FileDown } from 'lucide-react';
-import { FOUNDATION_META } from '../data/foundationData';
+import { 
+  X, 
+  QrCode, 
+  CheckCircle2, 
+  ShieldCheck, 
+  ArrowRight, 
+  FileDown, 
+  Copy, 
+  Check, 
+  Building2, 
+  Smartphone 
+} from 'lucide-react';
 import { TMF_META } from '../data/tmfVerifiedData';
-import { openRazorpayCheckout } from '../utils/razorpay';
 import { generate80GCertificatePdf, download80GCertificate } from '../lib/certificateGenerator';
 import { tmfBackend } from '../services/backend';
 
@@ -24,7 +33,10 @@ export const DonateModal: React.FC<DonateModalProps> = ({
   const [amount, setAmount] = useState<number>(initialAmount);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [pillar, setPillar] = useState<string>(initialPillar);
-  const [step, setStep] = useState<'input' | 'payment_choice' | 'qr_view' | 'receipt'>('input');
+  const [step, setStep] = useState<'input' | 'payment_details' | 'receipt'>('input');
+  const [paymentChannel, setPaymentChannel] = useState<'qr' | 'bank'>('qr');
+  const [utrNumber, setUtrNumber] = useState<string>('');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [paymentId, setPaymentId] = useState<string>('');
@@ -64,44 +76,23 @@ export const DonateModal: React.FC<DonateModalProps> = ({
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount || amount < 100) return;
-    setStep('payment_choice');
+    setStep('payment_details');
   };
 
-  const handleRazorpayGateway = () => {
+  const handleCopy = (text: string, fieldName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldName);
+    setTimeout(() => {
+      setCopiedField(null);
+    }, 2500);
+  };
+
+  const handleConfirmTransfer = async () => {
     setIsProcessing(true);
-    openRazorpayCheckout({
-      amountInRupees: amount,
-      donorName: donorData.name || 'Anonymous Donor',
-      donorEmail: donorData.email || 'donor@tmf.org.in',
-      donorPhone: donorData.phone || '9143430927',
-      panNumber: donorData.panNumber || 'ABCDE1234F',
-      purpose: `80G Certified Contribution to ${pillar}`,
-      onSuccess: async (pId: string) => {
-        setIsProcessing(false);
-        setPaymentId(pId);
-        setStep('receipt');
-        await tmfBackend.processDonation({
-          donorName: donorData.name || 'Anonymous Donor',
-          donorEmail: donorData.email || '',
-          donorPhone: donorData.phone || '',
-          panNumber: donorData.panNumber || 'ABCDE1234F',
-          amount,
-          frequency,
-          cause: pillar,
-          paymentMethod: 'Card',
-          paymentId: pId,
-        });
-      },
-      onDismiss: () => {
-        setIsProcessing(false);
-      },
-    });
-  };
-
-  const handleManualQrSuccess = async () => {
-    const manualTxn = `UPI-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    setPaymentId(manualTxn);
+    const finalTxn = utrNumber.trim() || `TMF-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    setPaymentId(finalTxn);
     setStep('receipt');
+    setIsProcessing(false);
     await tmfBackend.processDonation({
       donorName: donorData.name || 'Anonymous Supporter',
       donorEmail: donorData.email || '',
@@ -110,8 +101,8 @@ export const DonateModal: React.FC<DonateModalProps> = ({
       amount,
       frequency,
       cause: pillar,
-      paymentMethod: 'UPI',
-      paymentId: manualTxn,
+      paymentMethod: paymentChannel === 'qr' ? 'UPI' : 'Direct Transfer',
+      paymentId: finalTxn,
     });
   };
 
@@ -148,8 +139,8 @@ export const DonateModal: React.FC<DonateModalProps> = ({
   };
 
   const receiptNumber = `80G-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
-  const upiDeepLink = `upi://pay?pa=${FOUNDATION_META.upiId}&pn=${encodeURIComponent(FOUNDATION_META.name)}&am=${amount}&cu=INR&tn=${encodeURIComponent('80G Donation to ' + pillar)}`;
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiDeepLink)}`;
+  const upiId = TMF_META.bank.upiId || '20260933445145-iservuqrsbrp@cbin';
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(TMF_META.name)}&am=${amount}&cu=INR&tn=${encodeURIComponent('80G Contribution to ' + pillar)}`;
 
   return (
     <AnimatePresence>
@@ -348,96 +339,210 @@ export const DonateModal: React.FC<DonateModalProps> = ({
               </form>
             )}
 
-            {step === 'payment_choice' && (
-              <div className="space-y-4 text-center">
-                <div className="p-4 rounded-2xl bg-white border border-black/[0.06] text-left">
-                  <div className="text-[11px] text-slate-500 uppercase tracking-wider font-mono">
-                    Contribution Summary
+            {step === 'payment_details' && (
+              <div className="space-y-4">
+                {/* Contribution Summary */}
+                <div className="p-4 rounded-2xl bg-white border border-black/[0.06] flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-wider font-mono block">
+                      Target Contribution ({frequency === 'monthly' ? 'Monthly' : 'One-Time'})
+                    </span>
+                    <span className="text-xs text-[#1B3B2B] font-semibold block truncate max-w-[200px] sm:max-w-xs">
+                      {pillar}
+                    </span>
                   </div>
-                  <div className="font-['DM_Serif_Display'] text-2xl text-[#151C18] mt-0.5">
-                    ₹{amount.toLocaleString('en-IN')}
+                  <div className="text-right">
+                    <span className="font-['DM_Serif_Display'] text-2xl text-[#1B3B2B]">
+                      ₹{amount.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[10px] text-emerald-700 font-mono block font-bold">
+                      50% Sec 80G Tax-Saved
+                    </span>
                   </div>
-                  <div className="text-xs text-[#1B3B2B] font-semibold mt-0.5">{pillar}</div>
                 </div>
 
-                <div className="space-y-3 pt-2">
-                  {/* Razorpay Gateway Option */}
+                {/* Channel Switcher Tabs */}
+                <div className="flex p-1 bg-black/[0.05] rounded-2xl gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentChannel('qr')}
+                    className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      paymentChannel === 'qr'
+                        ? 'bg-[#1B3B2B] text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <QrCode className="w-4 h-4" />
+                    <span>Central Bank UPI QR</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentChannel('bank')}
+                    className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                      paymentChannel === 'bank'
+                        ? 'bg-[#1B3B2B] text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <Building2 className="w-4 h-4" />
+                    <span>Direct Bank Wire (NEFT)</span>
+                  </button>
+                </div>
+
+                {/* 1. Official QR Standee Display */}
+                {paymentChannel === 'qr' && (
+                  <div className="space-y-3.5 text-center">
+                    <div className="p-3 bg-white rounded-2xl border border-black/[0.08] inline-block shadow-sm max-w-[230px] mx-auto">
+                      <div className="relative rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
+                        <img 
+                          src="/tmf-assets/tmf-qr.jpeg" 
+                          alt="Official Central Bank of India UPI QR Standee" 
+                          className="w-full max-h-[240px] object-contain mx-auto"
+                        />
+                      </div>
+                      <div className="text-[10px] font-mono font-bold text-[#1B3B2B] mt-2 truncate">
+                        {TMF_META.name}
+                      </div>
+                    </div>
+
+                    {/* Copy UPI ID Bar */}
+                    <div className="p-3 bg-white rounded-xl border border-black/[0.08] flex items-center justify-between gap-2 max-w-md mx-auto">
+                      <div className="text-left overflow-hidden">
+                        <span className="text-[10px] text-slate-500 uppercase tracking-wider font-mono block">
+                          Official UPI ID
+                        </span>
+                        <span className="font-mono text-xs font-bold text-[#151C18] truncate block select-all">
+                          {upiId}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(upiId, 'upi')}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold cursor-pointer shrink-0 flex items-center gap-1 transition-colors"
+                      >
+                        {copiedField === 'upi' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>{copiedField === 'upi' ? 'COPIED' : 'COPY'}</span>
+                      </button>
+                    </div>
+
+                    {/* Quick App Launcher */}
+                    <div className="flex justify-center gap-2">
+                      <a
+                        href={upiDeepLink}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold hover:bg-amber-100 transition-colors"
+                      >
+                        <Smartphone className="w-3.5 h-3.5 text-amber-700" />
+                        <span>Pay via UPI App (GPay / PhonePe / Paytm / BHIM)</span>
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Direct Bank Wire Display */}
+                {paymentChannel === 'bank' && (
+                  <div className="space-y-2.5">
+                    <div className="p-4 bg-white rounded-2xl border border-black/[0.08] space-y-3 font-mono text-xs">
+                      {/* Beneficiary Name */}
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                        <div>
+                          <span className="text-[10px] text-slate-500 uppercase block">Account Beneficiary</span>
+                          <span className="font-bold text-[#151C18] text-sm">{TMF_META.bank.accountName}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(TMF_META.bank.accountName, 'acc_name')}
+                          className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-[#151C18] text-[11px] font-bold cursor-pointer"
+                        >
+                          {copiedField === 'acc_name' ? 'COPIED' : 'COPY'}
+                        </button>
+                      </div>
+
+                      {/* Bank & Branch */}
+                      <div className="pb-2 border-b border-slate-100">
+                        <span className="text-[10px] text-slate-500 uppercase block">Bank &amp; Branch</span>
+                        <span className="font-bold text-[#151C18] block">{TMF_META.bank.bankName}</span>
+                        <span className="text-[11px] text-slate-600 block">{TMF_META.bank.branch}</span>
+                      </div>
+
+                      {/* Account Number */}
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                        <div>
+                          <span className="text-[10px] text-slate-500 uppercase block">Account Number</span>
+                          <span className="font-bold text-emerald-800 text-base select-all">{TMF_META.bank.accountNumber}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(TMF_META.bank.accountNumber, 'acc_num')}
+                          className="px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-[#151C18] text-[11px] font-bold cursor-pointer"
+                        >
+                          {copiedField === 'acc_num' ? 'COPIED' : 'COPY'}
+                        </button>
+                      </div>
+
+                      {/* IFSC & MICR */}
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100">
+                          <div>
+                            <span className="text-[9px] text-slate-500 uppercase block">IFSC Code</span>
+                            <span className="font-bold text-xs text-[#151C18] select-all">{TMF_META.bank.ifsc}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(TMF_META.bank.ifsc, 'ifsc')}
+                            className="text-[10px] text-indigo-600 font-bold hover:underline cursor-pointer"
+                          >
+                            {copiedField === 'ifsc' ? '✓' : 'COPY'}
+                          </button>
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100">
+                          <div>
+                            <span className="text-[9px] text-slate-500 uppercase block">MICR Code</span>
+                            <span className="font-bold text-xs text-[#151C18] select-all">{TMF_META.bank.micr}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(TMF_META.bank.micr, 'micr')}
+                            className="text-[10px] text-indigo-600 font-bold hover:underline cursor-pointer"
+                          >
+                            {copiedField === 'micr' ? '✓' : 'COPY'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* UTR / Transaction Reference & Confirm */}
+                <div className="pt-2 space-y-3">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                      UTR / Transaction Reference (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={utrNumber}
+                      onChange={(e) => setUtrNumber(e.target.value)}
+                      placeholder="e.g. UPI Ref / Bank UTR Number"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white border border-black/[0.1] text-xs font-mono text-[#151C18] focus:outline-hidden focus:border-[#1B3B2B]"
+                    />
+                  </div>
+
                   <button
                     type="button"
                     disabled={isProcessing}
-                    onClick={handleRazorpayGateway}
-                    className="w-full py-4 px-5 rounded-2xl bg-[#1B3B2B] hover:bg-[#26533D] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-between shadow-md cursor-pointer transition-all"
+                    onClick={handleConfirmTransfer}
+                    className="w-full py-4 rounded-full bg-[#1B3B2B] hover:bg-[#26533D] text-white text-xs font-bold uppercase tracking-wider shadow-lg shadow-[#1B3B2B]/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
                   >
-                    <div className="flex items-center gap-3 text-left">
-                      <CreditCard className="w-5 h-5 text-emerald-300" />
-                      <div>
-                        <div>Pay with Cards / Netbanking / Razorpay</div>
-                        <div className="text-[10px] text-white/70 font-normal lowercase">
-                          instant verified checkout
-                        </div>
-                      </div>
-                    </div>
+                    <span>{isProcessing ? 'Verifying...' : 'I Have Transferred Contribution → Generate 80G Receipt'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  {/* Direct UPI QR Option */}
                   <button
                     type="button"
-                    onClick={() => setStep('qr_view')}
-                    className="w-full py-4 px-5 rounded-2xl bg-white hover:bg-black/[0.02] border border-black/[0.1] text-[#151C18] text-xs font-bold uppercase tracking-wider flex items-center justify-between shadow-xs cursor-pointer transition-all"
+                    onClick={() => setStep('input')}
+                    className="text-xs text-slate-500 hover:text-slate-900 font-semibold cursor-pointer block mx-auto pt-1"
                   >
-                    <div className="flex items-center gap-3 text-left">
-                      <QrCode className="w-5 h-5 text-amber-800" />
-                      <div>
-                        <div>Pay via UPI QR (GPay / PhonePe / Paytm)</div>
-                        <div className="text-[10px] text-slate-500 font-normal lowercase">
-                          scan directly from banking apps
-                        </div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 opacity-50" />
-                  </button>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setStep('input')}
-                  className="text-xs text-slate-500 hover:text-slate-900 font-semibold cursor-pointer pt-2"
-                >
-                  ← Change Amount or Details
-                </button>
-              </div>
-            )}
-
-            {step === 'qr_view' && (
-              <div className="space-y-4 text-center">
-                <div className="p-4 bg-white rounded-2xl border border-black/[0.08] inline-block shadow-sm">
-                  <img src={qrCodeUrl} alt="TMF UPI QR" className="w-48 h-48 mx-auto" />
-                  <div className="text-xs font-mono font-bold text-[#1B3B2B] mt-2">
-                    UPI ID: {FOUNDATION_META.upiId}
-                  </div>
-                </div>
-
-                <div className="text-xs text-slate-600 space-y-1">
-                  <p>Scan with any UPI app (Google Pay, PhonePe, Paytm, BHIM)</p>
-                  <p className="font-bold text-[#151C18]">Amount: ₹{amount.toLocaleString('en-IN')}</p>
-                </div>
-
-                <div className="pt-2 space-y-2">
-                  <button
-                    type="button"
-                    onClick={handleManualQrSuccess}
-                    className="w-full py-3.5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold uppercase tracking-wider shadow-md cursor-pointer transition-all"
-                  >
-                    I Have Completed the Transfer →
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setStep('payment_choice')}
-                    className="text-xs text-slate-500 hover:text-slate-900 cursor-pointer block mx-auto pt-1"
-                  >
-                    ← Back to Payment Options
+                    ← Change Amount or Details
                   </button>
                 </div>
               </div>

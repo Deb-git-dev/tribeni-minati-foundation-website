@@ -13,6 +13,7 @@ export const BankingGateway: React.FC<BankingGatewayProps> = ({
   onOpenDocument,
 }) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [isQrZoomed, setIsQrZoomed] = useState<boolean>(false);
 
   const handleCopy = (text: string, fieldName: string) => {
     navigator.clipboard.writeText(text);
@@ -152,14 +153,31 @@ export const BankingGateway: React.FC<BankingGatewayProps> = ({
                 </p>
               </div>
 
-              {/* QR Box */}
-              <div className="p-4 bg-white rounded-2xl text-center flex flex-col items-center justify-center max-w-[200px] mx-auto shadow-lg">
-                <span className="material-symbols-outlined text-[#111827] text-7xl select-none">
-                  qr_code_2
-                </span>
-                <span className="text-[10px] font-mono font-bold text-[#111827] mt-1">
-                  Central Bank of India
-                </span>
+              {/* Official Central Bank QR Standee */}
+              <div 
+                onClick={() => setIsQrZoomed(true)}
+                className="p-3 bg-white rounded-2xl text-center flex flex-col items-center justify-center max-w-[220px] mx-auto shadow-xl cursor-pointer group hover:ring-2 hover:ring-amber-400 transition-all"
+                title="Click to view full high-res standee"
+              >
+                <div className="relative overflow-hidden rounded-xl bg-slate-50 border border-slate-100">
+                  <img
+                    src={TMF_META.bank.qrImage || '/tmf-assets/tmf-qr.jpeg'}
+                    alt="Tribeni Minati Foundation Central Bank UPI QR Standee"
+                    className="w-full max-h-[220px] object-contain group-hover:scale-102 transition-transform duration-200"
+                  />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1">
+                    <span className="material-symbols-outlined text-[16px]">zoom_in</span>
+                    <span>Enlarge</span>
+                  </div>
+                </div>
+                <div className="mt-2 w-full text-center">
+                  <span className="text-[10px] font-mono font-bold text-[#111827] block truncate">
+                    UPI: {TMF_META.bank.upiId}
+                  </span>
+                  <span className="text-[9px] text-[#4b41e1] font-semibold block">
+                    GPay • PhonePe • Paytm • BHIM
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -183,6 +201,53 @@ export const BankingGateway: React.FC<BankingGatewayProps> = ({
 
           </div>
         </div>
+
+        {/* QR Full Preview Modal */}
+        {isQrZoomed && (
+          <div 
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4"
+            onClick={() => setIsQrZoomed(false)}
+          >
+            <div 
+              className="bg-white rounded-3xl p-6 max-w-sm sm:max-w-md w-full shadow-2xl space-y-4 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#4b41e1]">qr_code_scanner</span>
+                  <h3 className="font-bold text-sm text-[#191c1e]">Official Central Bank UPI QR</h3>
+                </div>
+                <button
+                  onClick={() => setIsQrZoomed(false)}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center cursor-pointer font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-slate-50 flex justify-center">
+                <img
+                  src={TMF_META.bank.qrImage || '/tmf-assets/tmf-qr.jpeg'}
+                  alt="Tribeni Minati Foundation Standee"
+                  className="max-h-[500px] w-auto object-contain"
+                />
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Official UPI ID</span>
+                  <span className="font-mono text-xs font-bold text-[#191c1e] select-all">{TMF_META.bank.upiId}</span>
+                </div>
+                <button
+                  onClick={() => handleCopy(TMF_META.bank.upiId, 'upi_modal')}
+                  className="px-3 py-1.5 rounded-lg bg-[#4b41e1] hover:bg-[#645efb] text-white text-xs font-bold cursor-pointer"
+                >
+                  {copiedField === 'upi_modal' ? 'COPIED!' : 'COPY'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </section>
